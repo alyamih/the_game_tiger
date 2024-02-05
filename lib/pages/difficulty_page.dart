@@ -40,7 +40,9 @@ class _DifficultyPageState extends State<DifficultyPage> {
                         Navigator.of(context).push(
                           MaterialPageRoute<void>(
                               builder: (BuildContext context) =>
-                                  const SettingsPage()),
+                                  const SettingsPage(
+                                    currentDifficulty: EDifficult.simple,
+                                  )),
                         );
                       },
                       child: Image.asset('assets/settings.png')),
@@ -87,57 +89,66 @@ class _DifficultyPageState extends State<DifficultyPage> {
                   )
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Stack(
-                    alignment: Alignment.bottomCenter,
-                    clipBehavior: Clip.none,
-                    children: [
-                      currentPage == 0
-                          ? Image.asset('assets/simple.png')
-                          : currentPage == 1
-                              ? Image.asset('assets/middle.png')
-                              : Image.asset('assets/advanced.png'),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: Row(
-                          children: [
-                            InkWell(
-                                onTap: () {
-                                  if (currentPage > 0) {
-                                    currentPage--;
-                                  } else {
-                                    currentPage = 2;
-                                  }
-                                  setState(() {});
-                                },
-                                child: Image.asset('assets/back.png')),
-                            InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute<void>(
-                                        builder: (BuildContext context) =>
-                                            const LevelsPage()),
-                                  );
-                                },
-                                child: Image.asset('assets/continue.png')),
-                            InkWell(
-                                onTap: () {
-                                  if (currentPage < 2) {
-                                    currentPage++;
-                                  } else {
-                                    currentPage = 0;
-                                  }
-                                  setState(() {});
-                                },
-                                child: Image.asset('assets/next.png')),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ],
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Stack(
+                      alignment: Alignment.bottomCenter,
+                      clipBehavior: Clip.none,
+                      children: [
+                        currentPage == 0
+                            ? Image.asset('assets/simple.png')
+                            : currentPage == 1
+                                ? Image.asset('assets/middle.png')
+                                : Image.asset('assets/advanced.png'),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Row(
+                            children: [
+                              InkWell(
+                                  onTap: () {
+                                    if (currentPage > 0) {
+                                      currentPage--;
+                                    } else {
+                                      currentPage = 2;
+                                    }
+                                    setState(() {});
+                                  },
+                                  child: Image.asset('assets/back.png')),
+                              InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute<void>(
+                                          builder: (BuildContext context) =>
+                                              LevelsPage(
+                                                currentDifficulty:
+                                                    currentPage == 0
+                                                        ? EDifficult.simple
+                                                        : currentPage == 1
+                                                            ? EDifficult.medium
+                                                            : EDifficult.hard,
+                                              )),
+                                    );
+                                  },
+                                  child: Image.asset('assets/continue.png')),
+                              InkWell(
+                                  onTap: () {
+                                    if (currentPage < 2) {
+                                      currentPage++;
+                                    } else {
+                                      currentPage = 0;
+                                    }
+                                    setState(() {});
+                                  },
+                                  child: Image.asset('assets/next.png')),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               )
             ],
           ),

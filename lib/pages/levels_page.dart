@@ -6,19 +6,55 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_game_tiger/model/bomb_game.dart';
 import 'package:the_game_tiger/model/level_item.dart';
 import 'package:the_game_tiger/model/user_item.dart';
+import 'package:the_game_tiger/pages/difficulty_page.dart';
 import 'package:the_game_tiger/pages/level_page.dart';
 import 'package:the_game_tiger/pages/settings_page.dart';
 
-LevelItem level1 = LevelItem(levelNumber: 1, isCompleted: false);
-LevelItem level2 = LevelItem(levelNumber: 2, isCompleted: false);
-LevelItem level3 = LevelItem(levelNumber: 3, isCompleted: false);
-LevelItem level4 = LevelItem(levelNumber: 4, isCompleted: false);
-LevelItem level5 = LevelItem(levelNumber: 5, isCompleted: false);
-UserItem user = UserItem(money: 0, hp: 4);
+enum EDifficult { simple, medium, hard }
+
+LevelItem level1 = LevelItem(
+  levelNumber: 1,
+  isSimpleCompleted: false,
+  isHardCompleted: false,
+  isMediumCompleted: false,
+);
+LevelItem level2 = LevelItem(
+  levelNumber: 2,
+  isSimpleCompleted: false,
+  isHardCompleted: false,
+  isMediumCompleted: false,
+);
+LevelItem level3 = LevelItem(
+  levelNumber: 3,
+  isSimpleCompleted: false,
+  isHardCompleted: false,
+  isMediumCompleted: false,
+);
+LevelItem level4 = LevelItem(
+  levelNumber: 4,
+  isSimpleCompleted: false,
+  isHardCompleted: false,
+  isMediumCompleted: false,
+);
+LevelItem level5 = LevelItem(
+  levelNumber: 5,
+  isSimpleCompleted: false,
+  isHardCompleted: false,
+  isMediumCompleted: false,
+);
+LevelItem level6 = LevelItem(
+  levelNumber: 6,
+  isSimpleCompleted: false,
+  isHardCompleted: false,
+  isMediumCompleted: false,
+);
+
+UserItem user = UserItem(money: 0, hp: 10);
 BombGame bombGame = BombGame();
 
 class LevelsPage extends StatefulWidget {
-  const LevelsPage({super.key});
+  const LevelsPage({super.key, required this.currentDifficulty});
+  final EDifficult currentDifficulty;
 
   @override
   State<LevelsPage> createState() => _LevelsPageState();
@@ -53,7 +89,11 @@ class _LevelsPageState extends State<LevelsPage> {
                     children: [
                       InkWell(
                           onTap: () {
-                            Navigator.pop(context);
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute<void>(
+                                  builder: (BuildContext context) =>
+                                      const DifficultyPage()),
+                            );
                           },
                           child: Image.asset('assets/home.png')),
                       InkWell(
@@ -61,7 +101,10 @@ class _LevelsPageState extends State<LevelsPage> {
                             Navigator.of(context).push(
                               MaterialPageRoute<void>(
                                   builder: (BuildContext context) =>
-                                      const SettingsPage()),
+                                      SettingsPage(
+                                        currentDifficulty:
+                                            widget.currentDifficulty,
+                                      )),
                             );
                           },
                           child: Image.asset('assets/settings.png')),
@@ -129,7 +172,10 @@ class _LevelsPageState extends State<LevelsPage> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute<void>(
                                       builder: (BuildContext context) =>
-                                          const LevelPage()),
+                                          LevelPage(
+                                            currentDifficulty:
+                                                widget.currentDifficulty,
+                                          )),
                                 );
                               } else {
                                 hpDialog(context);
@@ -139,7 +185,18 @@ class _LevelsPageState extends State<LevelsPage> {
                               clipBehavior: Clip.none,
                               alignment: Alignment.center,
                               children: [
-                                level1.isCompleted!
+                                (level1.isSimpleCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.simple &&
+                                            level1.isSimpleCompleted!) ||
+                                        (level1.isMediumCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.medium &&
+                                            level1.isMediumCompleted!) ||
+                                        (level1.isHardCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.hard &&
+                                            level1.isHardCompleted!)
                                     ? Image.asset('assets/completed_level.png')
                                     : Image.asset('assets/unpassed_level.png'),
                                 const Positioned(
@@ -165,7 +222,10 @@ class _LevelsPageState extends State<LevelsPage> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute<void>(
                                       builder: (BuildContext context) =>
-                                          const LevelPage()),
+                                          LevelPage(
+                                            currentDifficulty:
+                                                widget.currentDifficulty,
+                                          )),
                                 );
                               } else {
                                 hpDialog(context);
@@ -175,7 +235,18 @@ class _LevelsPageState extends State<LevelsPage> {
                               clipBehavior: Clip.none,
                               alignment: Alignment.center,
                               children: [
-                                level2.isCompleted!
+                                (level2.isSimpleCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.simple &&
+                                            level2.isSimpleCompleted!) ||
+                                        (level2.isMediumCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.medium &&
+                                            level2.isMediumCompleted!) ||
+                                        (level2.isHardCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.hard &&
+                                            level2.isHardCompleted!)
                                     ? Image.asset('assets/completed_level.png')
                                     : Image.asset('assets/unpassed_level.png'),
                                 const Positioned(
@@ -201,7 +272,10 @@ class _LevelsPageState extends State<LevelsPage> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute<void>(
                                       builder: (BuildContext context) =>
-                                          const LevelPage()),
+                                          LevelPage(
+                                            currentDifficulty:
+                                                widget.currentDifficulty,
+                                          )),
                                 );
                               } else {
                                 hpDialog(context);
@@ -211,7 +285,18 @@ class _LevelsPageState extends State<LevelsPage> {
                               clipBehavior: Clip.none,
                               alignment: Alignment.center,
                               children: [
-                                level3.isCompleted!
+                                (level3.isSimpleCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.simple &&
+                                            level3.isSimpleCompleted!) ||
+                                        (level3.isMediumCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.medium &&
+                                            level3.isMediumCompleted!) ||
+                                        (level3.isHardCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.hard &&
+                                            level3.isHardCompleted!)
                                     ? Image.asset('assets/completed_level.png')
                                     : Image.asset('assets/unpassed_level.png'),
                                 const Positioned(
@@ -237,7 +322,10 @@ class _LevelsPageState extends State<LevelsPage> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute<void>(
                                       builder: (BuildContext context) =>
-                                          const LevelPage()),
+                                          LevelPage(
+                                            currentDifficulty:
+                                                widget.currentDifficulty,
+                                          )),
                                 );
                               } else {
                                 hpDialog(context);
@@ -247,7 +335,18 @@ class _LevelsPageState extends State<LevelsPage> {
                               clipBehavior: Clip.none,
                               alignment: Alignment.center,
                               children: [
-                                level4.isCompleted!
+                                (level4.isSimpleCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.simple &&
+                                            level4.isSimpleCompleted!) ||
+                                        (level4.isMediumCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.medium &&
+                                            level4.isMediumCompleted!) ||
+                                        (level4.isHardCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.hard &&
+                                            level4.isHardCompleted!)
                                     ? Image.asset('assets/completed_level.png')
                                     : Image.asset('assets/unpassed_level.png'),
                                 const Positioned(
@@ -273,7 +372,10 @@ class _LevelsPageState extends State<LevelsPage> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute<void>(
                                       builder: (BuildContext context) =>
-                                          const LevelPage()),
+                                          LevelPage(
+                                            currentDifficulty:
+                                                widget.currentDifficulty,
+                                          )),
                                 );
                               } else {
                                 hpDialog(context);
@@ -283,7 +385,18 @@ class _LevelsPageState extends State<LevelsPage> {
                               clipBehavior: Clip.none,
                               alignment: Alignment.center,
                               children: [
-                                level5.isCompleted!
+                                (level5.isSimpleCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.simple &&
+                                            level5.isSimpleCompleted!) ||
+                                        (level5.isMediumCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.medium &&
+                                            level5.isMediumCompleted!) ||
+                                        (level5.isHardCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.hard &&
+                                            level5.isHardCompleted!)
                                     ? Image.asset('assets/completed_level.png')
                                     : Image.asset('assets/unpassed_level.png'),
                                 const Positioned(
@@ -300,9 +413,172 @@ class _LevelsPageState extends State<LevelsPage> {
                               ],
                             ),
                           ),
-                          Image.asset('assets/closed_level.png'),
-                          Image.asset('assets/closed_level.png'),
-                          Image.asset('assets/closed_level.png'),
+                          InkWell(
+                            onTap: () {
+                              if (user.hp! > 0) {
+                                bombGame.currentLevel = 6;
+                                bombGame.initCardsList();
+                                bombGame.initGame();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute<void>(
+                                      builder: (BuildContext context) =>
+                                          LevelPage(
+                                            currentDifficulty:
+                                                widget.currentDifficulty,
+                                          )),
+                                );
+                              } else {
+                                hpDialog(context);
+                              }
+                            },
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              alignment: Alignment.center,
+                              children: [
+                                (level6.isSimpleCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.simple &&
+                                            level6.isSimpleCompleted!) ||
+                                        (level6.isMediumCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.medium &&
+                                            level6.isMediumCompleted!) ||
+                                        (level6.isHardCompleted != null &&
+                                            widget.currentDifficulty ==
+                                                EDifficult.hard &&
+                                            level6.isHardCompleted!)
+                                    ? Image.asset('assets/completed_level.png')
+                                    : Image.asset('assets/unpassed_level.png'),
+                                const Positioned(
+                                  bottom: 20,
+                                  child: Text(
+                                    '6',
+                                    style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return CupertinoAlertDialog(
+                                        title: Text(
+                                          'Closed levels',
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                        content: Text(
+                                          'Complete the initial ones to unlock.',
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                        actions: [
+                                          Card(
+                                            color: Colors.transparent,
+                                            elevation: 0.0,
+                                            child: InkWell(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  DefaultTextStyle(
+                                                    style: TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      color: Colors.black
+                                                          .withOpacity(0.6),
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 17,
+                                                    ),
+                                                    child: const Text(
+                                                      'Ok',
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              },
+                              child: Image.asset('assets/closed_level.png')),
+                          InkWell(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return CupertinoAlertDialog(
+                                        title: Text(
+                                          'Closed levels',
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                        content: Text(
+                                          'Complete the initial ones to unlock.',
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                        actions: [
+                                          Card(
+                                            color: Colors.transparent,
+                                            elevation: 0.0,
+                                            child: InkWell(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  DefaultTextStyle(
+                                                    style: TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      color: Colors.black
+                                                          .withOpacity(0.6),
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 17,
+                                                    ),
+                                                    child: const Text(
+                                                      'Ok',
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              },
+                              child: Image.asset('assets/closed_level.png')),
                         ],
                       ),
                     ),
@@ -376,13 +652,15 @@ void getBombGameSP(Function() callback) async {
   final rawJson3 = prefs.getString('level3') ?? '';
   final rawJson4 = prefs.getString('level4') ?? '';
   final rawJson5 = prefs.getString('level5') ?? '';
-  final rawJson6 = prefs.getString('user') ?? '';
+  final rawJson6 = prefs.getString('level6') ?? '';
+  final rawJson7 = prefs.getString('user') ?? '';
   Map<String, dynamic> map1 = {};
   Map<String, dynamic> map2 = {};
   Map<String, dynamic> map3 = {};
   Map<String, dynamic> map4 = {};
   Map<String, dynamic> map5 = {};
   Map<String, dynamic> map6 = {};
+  Map<String, dynamic> map7 = {};
   if (rawJson1.isNotEmpty) {
     map1 = jsonDecode(rawJson1);
   }
@@ -403,6 +681,10 @@ void getBombGameSP(Function() callback) async {
   if (rawJson6.isNotEmpty) {
     map6 = jsonDecode(rawJson6);
   }
+
+  if (rawJson7.isNotEmpty) {
+    map7 = jsonDecode(rawJson7);
+  }
   if (map1.isNotEmpty) {
     level1 = LevelItem.fromJson(map1);
   }
@@ -421,7 +703,11 @@ void getBombGameSP(Function() callback) async {
   }
 
   if (map6.isNotEmpty) {
-    user = UserItem.fromJson(map6);
+    level6 = LevelItem.fromJson(map6);
+  }
+
+  if (map7.isNotEmpty) {
+    user = UserItem.fromJson(map7);
   }
   callback();
 }

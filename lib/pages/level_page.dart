@@ -11,7 +11,8 @@ import 'package:the_game_tiger/pages/levels_page.dart';
 import 'package:the_game_tiger/pages/settings_page.dart';
 
 class LevelPage extends StatefulWidget {
-  const LevelPage({super.key});
+  const LevelPage({super.key, required this.currentDifficulty});
+  final EDifficult currentDifficulty;
 
   @override
   State<LevelPage> createState() => _LevelPageState();
@@ -21,6 +22,7 @@ class _LevelPageState extends State<LevelPage> {
   String bombImage = '';
   int currentIndex = 100;
   List<String> checkedBlocks = [];
+  bool gameOver = false;
   @override
   void initState() {
     super.initState();
@@ -51,8 +53,10 @@ class _LevelPageState extends State<LevelPage> {
                           onTap: () {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute<void>(
-                                  builder: (BuildContext context) =>
-                                      const LevelsPage()),
+                                  builder: (BuildContext context) => LevelsPage(
+                                        currentDifficulty:
+                                            widget.currentDifficulty,
+                                      )),
                             );
                           },
                           child: Image.asset('assets/home.png')),
@@ -61,7 +65,10 @@ class _LevelPageState extends State<LevelPage> {
                             Navigator.of(context).push(
                               MaterialPageRoute<void>(
                                   builder: (BuildContext context) =>
-                                      const SettingsPage()),
+                                      SettingsPage(
+                                        currentDifficulty:
+                                            widget.currentDifficulty,
+                                      )),
                             );
                           },
                           child: Image.asset('assets/settings.png')),
@@ -72,12 +79,13 @@ class _LevelPageState extends State<LevelPage> {
                     child: OtpTimer(callback: () {
                       Future.delayed(const Duration(milliseconds: 500), () {
                         user.hp = user.hp! - 1;
-                        addSP(level1, level2, level3, level4, level5, user);
+                        addSP(level1, level2, level3, level4, level5, level6,
+                            user);
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute<void>(
-                              builder: (BuildContext context) =>
-                                  const LevelOverPage(
+                              builder: (BuildContext context) => LevelOverPage(
                                     isGoodOver: false,
+                                    currentDifficulty: widget.currentDifficulty,
                                   )),
                         );
                       });
@@ -160,12 +168,14 @@ class _LevelPageState extends State<LevelPage> {
                                 height: bombGame.currentLevel == 1 ||
                                         bombGame.currentLevel == 2
                                     ? 300
-                                    : bombGame.currentLevel == 5
+                                    : bombGame.currentLevel == 5 ||
+                                            bombGame.currentLevel == 6
                                         ? 400
                                         : 270,
                                 width: bombGame.currentLevel == 4
                                     ? 350
-                                    : bombGame.currentLevel == 5
+                                    : bombGame.currentLevel == 5 ||
+                                            bombGame.currentLevel == 6
                                         ? 400
                                         : 300,
                                 child: GridView.builder(
@@ -197,77 +207,196 @@ class _LevelPageState extends State<LevelPage> {
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                         onTap: () {
-                                          setState(() {
-                                            bombGame.gameImg![index] =
-                                                bombGame.cards_list[index];
-                                            currentIndex = index;
-                                          });
-                                          if (bombGame.gameImg![index] ==
-                                              "assets/icons/bomb.png") {
-                                            Future.delayed(
-                                                const Duration(
-                                                    milliseconds: 500), () {
-                                              user.hp = user.hp! - 1;
-                                              addSP(level1, level2, level3,
-                                                  level4, level5, user);
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                MaterialPageRoute<void>(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        const LevelOverPage(
-                                                          isGoodOver: false,
-                                                        )),
-                                              );
+                                          if (!gameOver) {
+                                            setState(() {
+                                              bombGame.gameImg![index] =
+                                                  bombGame.cards_list[index];
+                                              currentIndex = index;
                                             });
-                                          } else {
-                                            Future.delayed(
-                                                const Duration(
-                                                    milliseconds: 500), () {
-                                              setState(() {
-                                                checkedBlocks.add(
-                                                    bombGame.gameImg![index]);
-                                                if (checkedBlocks.length ==
-                                                    bombGame.cards_list.length -
-                                                        1) {
-                                                  if (bombGame.currentLevel ==
-                                                      level1.levelNumber) {
-                                                    level1.isCompleted = true;
-                                                  } else if (bombGame
-                                                          .currentLevel ==
-                                                      level2.levelNumber) {
-                                                    level2.isCompleted = true;
-                                                  } else if (bombGame
-                                                          .currentLevel ==
-                                                      level3.levelNumber) {
-                                                    level3.isCompleted = true;
-                                                  } else if (bombGame
-                                                          .currentLevel ==
-                                                      level4.levelNumber) {
-                                                    level4.isCompleted = true;
-                                                  } else if (bombGame
-                                                          .currentLevel ==
-                                                      level5.levelNumber) {
-                                                    level5.isCompleted = true;
-                                                  }
-                                                  user.money = user.money! + 50;
-
-                                                  user.hp = user.hp! - 1;
-                                                  addSP(level1, level2, level3,
-                                                      level4, level5, user);
-
-                                                  Navigator.of(context)
-                                                      .pushReplacement(
-                                                    MaterialPageRoute<void>(
-                                                        builder: (BuildContext
-                                                                context) =>
-                                                            const LevelOverPage(
-                                                              isGoodOver: true,
-                                                            )),
-                                                  );
-                                                }
+                                            if (bombGame.gameImg![index] ==
+                                                "assets/icons/bomb.png") {
+                                              gameOver = true;
+                                              Future.delayed(
+                                                  const Duration(
+                                                      milliseconds: 500), () {
+                                                user.hp = user.hp! - 1;
+                                                addSP(
+                                                    level1,
+                                                    level2,
+                                                    level3,
+                                                    level4,
+                                                    level5,
+                                                    level6,
+                                                    user);
+                                                Navigator.of(context)
+                                                    .pushReplacement(
+                                                  MaterialPageRoute<void>(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          LevelOverPage(
+                                                            isGoodOver: false,
+                                                            currentDifficulty:
+                                                                widget
+                                                                    .currentDifficulty,
+                                                          )),
+                                                );
                                               });
-                                            });
+                                            } else {
+                                              checkedBlocks.add(
+                                                  bombGame.gameImg![index]);
+
+                                              if (checkedBlocks.length ==
+                                                  bombGame.cards_list.length -
+                                                      1) {
+                                                gameOver = true;
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 500), () {
+                                                  setState(() {
+                                                    if (bombGame.currentLevel ==
+                                                        level1.levelNumber) {
+                                                      if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.simple) {
+                                                        level1.isSimpleCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.medium) {
+                                                        level1.isMediumCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.hard) {
+                                                        level1.isHardCompleted =
+                                                            true;
+                                                      }
+                                                    } else if (bombGame
+                                                            .currentLevel ==
+                                                        level2.levelNumber) {
+                                                      if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.simple) {
+                                                        level2.isSimpleCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.medium) {
+                                                        level2.isMediumCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.hard) {
+                                                        level2.isHardCompleted =
+                                                            true;
+                                                      }
+                                                    } else if (bombGame
+                                                            .currentLevel ==
+                                                        level3.levelNumber) {
+                                                      if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.simple) {
+                                                        level3.isSimpleCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.medium) {
+                                                        level3.isMediumCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.hard) {
+                                                        level3.isHardCompleted =
+                                                            true;
+                                                      }
+                                                    } else if (bombGame
+                                                            .currentLevel ==
+                                                        level4.levelNumber) {
+                                                      if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.simple) {
+                                                        level4.isSimpleCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.medium) {
+                                                        level4.isMediumCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.hard) {
+                                                        level4.isHardCompleted =
+                                                            true;
+                                                      }
+                                                    } else if (bombGame
+                                                            .currentLevel ==
+                                                        level5.levelNumber) {
+                                                      if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.simple) {
+                                                        level5.isSimpleCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.medium) {
+                                                        level5.isMediumCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.hard) {
+                                                        level5.isHardCompleted =
+                                                            true;
+                                                      }
+                                                    } else if (bombGame
+                                                            .currentLevel ==
+                                                        level6.levelNumber) {
+                                                      if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.simple) {
+                                                        level6.isSimpleCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.medium) {
+                                                        level6.isMediumCompleted =
+                                                            true;
+                                                      } else if (widget
+                                                              .currentDifficulty ==
+                                                          EDifficult.hard) {
+                                                        level6.isHardCompleted =
+                                                            true;
+                                                      }
+                                                    }
+                                                    user.money =
+                                                        user.money! + 50;
+
+                                                    user.hp = user.hp! - 1;
+                                                    addSP(
+                                                        level1,
+                                                        level2,
+                                                        level3,
+                                                        level4,
+                                                        level5,
+                                                        level6,
+                                                        user);
+
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                      MaterialPageRoute<void>(
+                                                          builder: (BuildContext
+                                                                  context) =>
+                                                              LevelOverPage(
+                                                                isGoodOver:
+                                                                    true,
+                                                                currentDifficulty:
+                                                                    widget
+                                                                        .currentDifficulty,
+                                                              )),
+                                                    );
+                                                  });
+                                                });
+                                              }
+                                            }
                                           }
                                         },
                                         child: Stack(
@@ -325,6 +454,7 @@ class _LevelPageState extends State<LevelPage> {
       LevelItem? levelMatch3,
       LevelItem? levelMatch4,
       LevelItem? levelMatch5,
+      LevelItem? levelMatch6,
       UserItem? user) async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -342,9 +472,11 @@ class _LevelPageState extends State<LevelPage> {
 
     String rawJson5 = jsonEncode(levelMatch5!.toJson());
     prefs.setString('level5', rawJson5);
+    String rawJson6 = jsonEncode(levelMatch6!.toJson());
+    prefs.setString('level6', rawJson6);
 
-    String rawJson6 = jsonEncode(user!.toJson());
-    prefs.setString('user', rawJson6);
+    String rawJson7 = jsonEncode(user!.toJson());
+    prefs.setString('user', rawJson7);
   }
 }
 

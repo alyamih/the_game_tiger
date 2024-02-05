@@ -3,7 +3,8 @@ import 'package:the_game_tiger/pages/levels_page.dart';
 import 'package:the_game_tiger/pages/show_screen.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+  const SettingsPage({super.key, required this.currentDifficulty});
+  final EDifficult currentDifficulty;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +26,9 @@ class SettingsPage extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute<void>(
-                              builder: (BuildContext context) =>
-                                  const LevelsPage()),
+                              builder: (BuildContext context) => LevelsPage(
+                                    currentDifficulty: currentDifficulty,
+                                  )),
                         );
                       },
                       child: Image.asset('assets/home.png')),

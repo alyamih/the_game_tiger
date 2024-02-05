@@ -74,9 +74,22 @@ class BombGame {
         "assets/icons/present.png",
         "assets/icons/present.png",
         "assets/icons/present.png",
-        "assets/icons/present.png",
-        "assets/icons/present.png",
-        "assets/icons/present.png",
+      ];
+    } else if (currentLevel == 6) {
+      cardCount = 12;
+      cards_list = [
+        "assets/icons/crown.png",
+        "assets/icons/crown.png",
+        "assets/icons/crown.png",
+        "assets/icons/crown.png",
+        "assets/icons/crown.png",
+        "assets/icons/crown.png",
+        "assets/icons/crown.png",
+        "assets/icons/crown.png",
+        "assets/icons/crown.png",
+        "assets/icons/bomb.png",
+        "assets/icons/crown.png",
+        "assets/icons/crown.png",
       ];
     }
   }
