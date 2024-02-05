@@ -279,12 +279,17 @@ class _LevelPageState extends State<LevelPage> {
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: bombGame.gameImg![
-                                                                index] !=
-                                                            "assets/icons/icon_container.png"
+                                                                index] ==
+                                                            "assets/icons/bomb.png"
                                                         ? const AssetImage(
-                                                            "assets/icons/icon_container.png")
-                                                        : const AssetImage(
-                                                            "assets/icons/icon_container1.png")),
+                                                            "assets/bomb_container.png")
+                                                        : bombGame.gameImg![
+                                                                    index] !=
+                                                                "assets/icons/icon_container.png"
+                                                            ? const AssetImage(
+                                                                "assets/icons/icon_container.png")
+                                                            : const AssetImage(
+                                                                "assets/icons/icon_container1.png")),
                                                 borderRadius:
                                                     BorderRadius.circular(8.0),
                                               ),
