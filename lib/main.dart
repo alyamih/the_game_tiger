@@ -16,12 +16,7 @@ Future<void> main() async {
   ]);
   initScreen = preferences.getInt('initScreen');
   await preferences.setInt('initScreen', 1);
-  // preferences.clear();
-  // runApp(
-  //   DevicePreview(
-  //     builder: (context) => const MyApp(), // Wrap your app
-  //   ),
-  // );
+
   runApp(const MyApp());
 }
 
